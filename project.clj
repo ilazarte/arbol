@@ -1,8 +1,8 @@
 (defproject ilazarte/arbol "0.1.0-SNAPSHOT"
   
-  :description "A tree library helper"
+  :description "Arbol is a mixed data type tree transformer using simple selectors available in Clojure and ClojureScript."
   
-  :url "http://example.com/FIXME"
+  :url "https://github.com/ilazarte/arbol"
 
   :main ^:skip-aot gorilla-test.core
   

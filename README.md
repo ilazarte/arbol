@@ -2,6 +2,8 @@
 
 Arbol is a mixed data type tree transformer using simple selectors available in Clojure and ClojureScript.
 
+[![Clojars Project](http://clojars.org/ilazarte/arbol/latest-version.svg)](http://clojars.org/ilazarte/arbol)
+
 ## Usage
 
 What it can do in a super quick summary.  The same examples and more are available in the a gorilla worksheet.
