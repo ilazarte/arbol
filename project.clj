@@ -1,4 +1,4 @@
-(defproject arbol "0.1.0-SNAPSHOT"
+(defproject ilazarte/arbol "0.1.0-SNAPSHOT"
   
   :description "A tree library helper"
   
