@@ -3,6 +3,9 @@
 
 ; these transformations echo the gorilla repl demo available in ws
 
+(def vec-els
+  ["Hello" "This is a string"])
+
 (def simple
   [{:key "A" 
     :values "a val"} 

@@ -4,15 +4,18 @@
   
   :url "https://github.com/ilazarte/arbol"
 
-  :main ^:skip-aot gorilla-test.core
+  ; see below
+  ;:main ^:skip-aot gorilla-test.core
   
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2280"]]
 
-  :plugins [[com.keminglabs/cljx "0.4.0"]
-            [lein-cljsbuild "1.0.4-SNAPSHOT"]
-            [lein-pdo "0.1.1"]
-            [lein-gorilla "0.3.1"]]
+  ; ack! there seems to be middleware conflict between cljx and gorilla
+  ; look into making a new profile for it
+  ; [lein-gorilla "0.3.1" :exclusions [org.clojure/clojure]]
+  
+  :plugins [[lein-cljsbuild "1.0.4-SNAPSHOT"]
+            [lein-pdo "0.1.1"]]
 
   :jar-exclusions [#"\.cljx|\.svn|\.swp|\.swo|\.DS_Store"]
   
@@ -36,16 +39,19 @@
                                           :output-dir "out" 
                                           :optimizations :none}}}}
   
-  :profiles {:uberjar {:aot :all} ; gorilla repl
+  :profiles {;:uberjar {:aot :all} ; gorilla repl
              
              :dev {:dependencies [[compojure "1.1.8"]
                                   [ring "1.3.0"]
                                   [ring/ring-json "0.3.1"]
-                                  [hiccup "1.0.5"]]
+                                  [hiccup "1.0.5"]
+                                  [midje "1.6.3"]]
                    
-                   :plugins [[lein-ring "0.8.11"]]
+                   :plugins [[lein-ring "0.8.11"]
+                             [lein-midje "3.0.0"]
+                             [com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]]
                    
-                   :source-paths ["dev/clj" "dev/cljs"]
+                   :source-paths ["dev/clj" "dev/cljs" "test/clj"]
                    
                    :cljsbuild {:builds {:arbol {:source-paths ["dev/cljs"]}}}
                    
@@ -54,7 +60,8 @@
                              "auto"     ["pdo" "cljx" "auto," "cljsbuild" "auto"] 
                              "headless" ["ring" "server-headless" "8080"]
                              "server"   ["ring" "server" "8080"]
-                             "dev"      ["pdo" "server," "cljx" "auto," "cljsbuild" "auto"]}
+                             "dev"      ["pdo" "server," "cljx" "auto," "cljsbuild" "auto"]
+                             "autotest" ["midje" ":autotest"]}
               
                    :ring {:handler cljx-start.core/app}}})
                    

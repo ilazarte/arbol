@@ -1,6 +1,6 @@
 # Arbol
 
-Arbol is a mixed data type tree transformer using simple selectors available in Clojure and ClojureScript.
+Arbol is a mixed data type tree transformer using simple selectors available in Clojure and ClojureScript.  The api will most likely change a bit.  The selectors portion definitely as I'd like to experiment with available selection types.
 
 [![Clojars Project](http://clojars.org/ilazarte/arbol/latest-version.svg)](http://clojars.org/ilazarte/arbol)
 
@@ -24,9 +24,9 @@ setup:
 
     (climb 
       mixed 
-      [:values :vec] #(take-last 2 %) reverse vec ; notice the switch back to a vector
-      [:values :map] #(assoc % :orig-y (:y %))    ; save the original
-      [:y]           (partial * 2) inc)           ; just a little chaining just for the heck of it
+      [:values :.vec] #(take-last 2 %) reverse vec ; notice the switch back to a vector
+      [:values :.map] #(assoc % :orig-y (:y %))    ; save the original
+      [:y :.val]      (partial * 2) inc)           ; just a little chaining just for the heck of it
      
  result:
   
