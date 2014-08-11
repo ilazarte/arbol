@@ -1,4 +1,4 @@
-(defproject ilazarte/arbol "0.1.0-SNAPSHOT"
+(defproject ilazarte/arbol "0.1.0"
   
   :description "Arbol is a mixed data type tree transformer using simple selectors available in Clojure and ClojureScript."
   
@@ -61,7 +61,7 @@
                              "headless" ["ring" "server-headless" "8080"]
                              "server"   ["ring" "server" "8080"]
                              "dev"      ["pdo" "server," "cljx" "auto," "cljsbuild" "auto"]
-                             "autotest" ["midje" ":autotest"]}
+                             "autotest" ["do" "cljx" "once," "cljsbuild" "once," "midje" ":autotest"]}
               
                    :ring {:handler cljx-start.core/app}}})
                    

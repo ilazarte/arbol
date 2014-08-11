@@ -33,6 +33,10 @@ setup:
     [{:values [{:x "c", :y 7, :orig-y 3} {:x "b", :y 5, :orig-y 2}], :key "A"} 
      {:values [{:x "f", :y 13, :orig-y 6} {:x "e", :y 11, :orig-y 5}], :key "B"}] 
 
+## Plans
+
+Looking forward to adding predicates.  They would be centered around the previous keyword.
+
 ## License
 
 Copyright &copy; ilazarte 2014 Released under the Eclipse Public License, the same as Clojure.
