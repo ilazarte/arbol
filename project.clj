@@ -3,7 +3,13 @@
   :description "Arbol is a mixed data type tree transformer using simple selectors available in Clojure and ClojureScript."
   
   :url "https://github.com/ilazarte/arbol"
-
+  
+  :scm {:name "git"
+        :url "https://github.com/ilazarte/arbol"}
+  
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  
   ; see below
   ;:main ^:skip-aot gorilla-test.core
   
