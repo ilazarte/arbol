@@ -4,6 +4,7 @@
 ;;; # Arbol
 ;;; 
 ;;; The following worksheet demos the functionality of Arbol.  Arbol is a mixed data type tree transformer enabled with simple selector.  No more chaining or awkward mapping reduce.  Target n-depth data structures and do with them as you please.  All collections should be supported!
+;;; TODO these examples will probably fail, update for the latest selector format
 ;; **
 
 ;; @@

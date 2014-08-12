@@ -9,6 +9,7 @@ Arbol is a mixed data type tree transformer using simple selectors available in 
 What it can do in a super quick summary.  The same examples and more are available in the a gorilla worksheet.
 To launch, clone the repo, and start Gorilla with lein gorila.
 Navigate to the launch url and you can load the arbol-demo worksheet.
+--EDIT-- The worksheet is currently broken during project.clj changes, will restore.
 
 setup:
 

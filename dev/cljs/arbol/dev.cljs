@@ -2,6 +2,7 @@
   (:require [arbol.core :as core]))
 
 ; these transformations echo the gorilla repl demo available in ws
+; TODO update this for the new . selector format
 
 (def vec-els
   ["Hello" "This is a string"])
