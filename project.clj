@@ -1,4 +1,4 @@
-(defproject ilazarte/arbol "0.1.1"
+(defproject ilazarte/arbol "0.1.2"
   
   :description "Arbol is a mixed data type tree transformer using simple selectors available in Clojure and ClojureScript."
   
@@ -20,12 +20,15 @@
   ; look into making a new profile for it
   ; [lein-gorilla "0.3.1" :exclusions [org.clojure/clojure]]
   
-  :plugins [[lein-cljsbuild "1.0.4-SNAPSHOT"]
+  :plugins [[com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]
+            [lein-cljsbuild "1.0.4-SNAPSHOT"]
             [lein-pdo "0.1.1"]]
 
   :jar-exclusions [#"\.cljx|\.svn|\.swp|\.swo|\.DS_Store"]
   
   :resource-paths ["target/generated/classes"]
+  
+  :prep-tasks [["cljx" "once"] ["cljsbuild" "once"] "javac" "compile"]
   
   :source-paths ["src/cljx" "src/clj" "src/cljs"]
 
@@ -54,8 +57,7 @@
                                   [midje "1.6.3"]]
                    
                    :plugins [[lein-ring "0.8.11"]
-                             [lein-midje "3.0.0"]
-                             [com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]]
+                             [lein-midje "3.0.0"]]
                    
                    :source-paths ["dev/clj" "dev/cljs" "test/clj"]
                    
