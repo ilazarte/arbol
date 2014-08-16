@@ -1,4 +1,4 @@
-(defproject ilazarte/arbol "0.1.2"
+(defproject ilazarte/arbol "0.1.3"
   
   :description "Arbol is a mixed data type tree transformer using simple selectors available in Clojure and ClojureScript."
   

@@ -78,3 +78,59 @@
     [:a {:href "http://google.com"} "Google"]] 
    [:li 
     [:a {:href "http://apple.com"} "Apple"]]])
+
+(def squash-me [{:symbol "GOOG"
+                 :values [{:x 1
+                           :y 2}
+                          {:x 3}
+                          {:y 4}]}
+                {:symbol "AAPL"
+                 :values [{:x 5
+                           :y 6}
+                          {:x 7}
+                          {:y 8}]}])
+
+(sweet/fact
+  "we can use predicates to target specific cases of data types"
+  (core/climb
+    squash-me 
+    [:.map #(contains? % :symbol)]
+    #(assoc % :y (-> (:values %) last :y))
+    #(dissoc % :values)) => [{:symbol "GOOG"
+                              :y      4}
+                             {:symbol "AAPL"
+                              :y      8}])
+
+(sweet/fact
+  "predicates can be more than one just like transformation functions"
+  (core/climb
+    squash-me 
+    [:.map 
+     #(contains? % :x)
+     #(= 5 (:x %))]
+    #(update-in % [:x] (partial + 100))) => [{:symbol "GOOG"
+                                           :values [{:x 1
+                                                     :y 2}
+                                                    {:x 3}
+                                                    {:y 4}]}
+                                          {:symbol "AAPL"
+                                           :values [{:x 105
+                                                     :y 6}
+                                                    {:x 7}
+                                                    {:y 8}]}])
+
+(sweet/fact
+  "the previous example can of course be simplified to"
+  (core/climb
+    squash-me 
+    [:x :.val #(= 5 %)]
+    (partial + 100)) => [{:symbol "GOOG"
+                          :values [{:x 1
+                                    :y 2}
+                                   {:x 3}
+                                   {:y 4}]}
+                         {:symbol "AAPL"
+                          :values [{:x 105
+                                    :y 6}
+                                   {:x 7}
+                                   {:y 8}]}])

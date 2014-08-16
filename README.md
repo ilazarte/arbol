@@ -36,7 +36,8 @@ setup:
 
 ## Plans
 
-Looking forward to adding predicates.  They would be centered around the previous keyword.
+Now that predicates are added, will leave this for a bit, to see how it does, is it useful etc.
+TODO add more examples, but currently midje tests in source demo how to use them.
 
 ## License
 

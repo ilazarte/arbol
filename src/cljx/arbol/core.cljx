@@ -11,5 +11,5 @@
         mr
         (let [spec (first pr)
               sel  (first spec)
-              fx   (internal/rev-comp (rest spec))]
+              fx   (apply comp (reverse (rest spec)))]
         (recur (internal/traverse mr sel fx) (rest pr)))))))
