@@ -15,21 +15,29 @@
             run (cons fst (take-while (complement pred) (next s)))]
         (cons run (partition-every pred (seq (drop (count run) s))))))))
 
+(def fnk? #(or (keyword? %) (fn? %)))
+
 (defn read-selector
-  "Reads the raw selector vector and returns a map with :path :pred :rest keys
-  The path is the first keyword path element, then pred is every-pred for that axis.
-  A nil predicate indicates no tests are to be run on this path element.
-  Rest is the rest of the original raw vector."
+  "Read selector parses one step of the selector and
+   returns a map with :axis :pred :rest keys
+   Axis: first function or keyword in the selector.
+   Pred: an ever-pred on all predicates available for that axis.
+   A nil predicate indicates no tests are to be run on this path element.
+   Rest: the remainder of the everything else besides the current axis/pred."
   [selector]
-  (let [sels  (partition-every keyword? selector)
-        sel   (first sels)
+  (let [sels  (partition-every fnk? selector)   ; [:x number? [odd?]] -> ((:x) (:number [odd?]))
+        sel   (first sels)                      
         path  (first sel)
         preds (rest sel)
-        pred  (if (empty? preds) (constantly true) (apply every-pred preds))
-        rst   (-> sels rest flatten vec)]
+        pred  (if (empty? preds) (constantly true) (apply every-pred (first preds)))
+        rst   (vec (apply concat (rest sels)))]
     {:axis path
      :pred pred
      :rest rst}))
+
+(defn ispath? [axis mixed]
+  (if (fn? axis) 
+    (axis mixed)))
 
 (defn traverse
   "Recursively traverses structure, in place consumes stack.
@@ -44,19 +52,18 @@
     (traverse mixed selector fx []))
   ([mixed selector fx loc]
     (let [parsed (read-selector selector)
-          axis   (:axis parsed)
-          rst    (:rest parsed)
-          pred   (:pred parsed)
+          {:keys [axis rst pred]} parsed 
           islast (empty? rst)]
       (cond
-        (empty? selector)
+        (empty? selector) ; this is a hack for root selector which specified as an empty selector.
         (fx mixed) 
         (map? mixed)
-        (let [path      :.map
+        (let [path      ::map
               nloc      (conj loc path)
-              ispath    (= axis path)
-              matches   (and islast ispath (pred mixed))
-              descends  (and (not islast) ispath (pred mixed))
+              ispath    (ispath? axis mixed)
+              ispred    (if ispath (pred mixed)) 
+              matches   (and islast ispath ispred)
+              descends  (and (not islast) ispath ispred)
               rselector (if descends rst selector) 
               mfx       #(assoc 
                            %1 
@@ -77,39 +84,43 @@
               res       (reduce mfx {} mixed)]
           (if matches (fx res) res))
         (set? mixed)
-        (let [path      :.set
+        (let [path      ::set
               nloc      (conj loc path)
-              ispath    (= axis path)
-              matches   (and islast ispath (pred mixed))
-              descends  (and (not islast) ispath (pred mixed))
+              ispath    (ispath? axis mixed)
+              ispred    (if ispath (pred mixed)) 
+              matches   (and islast ispath ispred)
+              descends  (and (not islast) ispath ispred)
               rselector (if descends rst selector)
               vfx       #(traverse % rselector fx nloc)
               res       (mapv vfx mixed)]
         (if matches (fx res) res))
         (vector? mixed)
-        (let [path      :.vec
+        (let [path      ::vec
               nloc      (conj loc path)
-              ispath    (= axis path)
-              matches   (and islast ispath (pred mixed))
-              descends  (and (not islast) ispath (pred mixed))
+              ispath    (ispath? axis mixed)
+              ispred    (if ispath (pred mixed)) 
+              matches   (and islast ispath ispred)
+              descends  (and (not islast) ispath ispred)
               rselector (if descends rst selector)
               vfx       #(traverse % rselector fx nloc)
               res       (mapv vfx mixed)]
           (if matches (fx res) res))
         (sequential? mixed)
-        (let [path      :.seq
+        (let [path      :seq
               nloc      (conj loc path)
-              ispath    (= axis path)
-              matches   (and islast ispath (pred mixed))
-              descends  (and (not islast) ispath (pred mixed))
+              ispath    (ispath? axis mixed)
+              ispred    (if ispath (pred mixed)) 
+              matches   (and islast ispath ispred)
+              descends  (and (not islast) ispath ispred)
               rselector (if descends rst selector)
               sfx       #(conj %1 (traverse %2 rselector fx nloc))
               nseq      (empty mixed)
               res       (reverse (reduce sfx nseq mixed))]
           (if matches (fx res) res))
-        :else 
-        (let [path      :.val
+        :else
+        (let [path      ::scalar
               nloc      (conj loc path)
-              ispath    (= axis path)
-              matches   (and islast ispath (pred mixed))]
+              ispath    (ispath? axis mixed)
+              ispred    (if ispath (pred mixed)) 
+              matches   (and islast ispath ispred)]
           (if matches (fx mixed) mixed))))))

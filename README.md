@@ -6,38 +6,41 @@ Arbol is a mixed data type tree transformer using simple selectors available in 
 
 ## Usage
 
-What it can do in a super quick summary.  The same examples and more are available in the a gorilla worksheet.
-To launch, clone the repo, and start Gorilla with lein gorila.
-Navigate to the launch url and you can load the arbol-demo worksheet.
---EDIT-- The worksheet is currently broken during project.clj changes, will restore.
+What it can do in a super quick summary taken from the midje tests.
+The test package is the way to learn the api (which is still in progress)
 
 setup:
 
-    (def mixed 
-      [{:key "A" 
-        :values [{:x "a" :y 1} 
-                 {:x "b" :y 2} 
-                 {:x "c" :y 3}]} 
-       {:key "B" 
-        :values [{:x "d" :y 4} 
-                 {:x "e" :y 5} 
-                 {:x "f" :y 6}]}])
-
-    (climb 
-      mixed 
-      [:values :.vec] #(take-last 2 %) reverse vec ; notice the switch back to a vector
-      [:values :.map] #(assoc % :orig-y (:y %))    ; save the original
-      [:y :.val]      (partial * 2) inc)           ; just a little chaining just for the heck of it
-     
- result:
-  
-    [{:values [{:x "c", :y 7, :orig-y 3} {:x "b", :y 5, :orig-y 2}], :key "A"} 
-     {:values [{:x "f", :y 13, :orig-y 6} {:x "e", :y 11, :orig-y 5}], :key "B"}] 
+    (def obj-vec [{:a 1
+                   :b 2
+                   :value "apple"
+                   :child {:x 24
+                           :y 25
+                           :value "pie"}}
+                  {:a 3
+                   :b 4
+                   :value "orange"}])
+    
+    (sweet/fact 
+      "Replace a simple key anywhere in a hierarchy"
+      (core/climb 
+        obj-vec 
+        [:value string?] #(str "<" % ">")) => [{:a 1
+                                                :b 2
+                                                :value "<apple>"
+                                                :child {:x 24
+                                                        :y 25
+                                                        :value "<pie>"}}
+                                               {:a 3
+                                                :b 4
+                                                :value "<orange>"}])
 
 ## Plans
 
 Now that predicates are added, will leave this for a bit, to see how it does, is it useful etc.
-TODO add more examples, but currently midje tests in source demo how to use them.
+Recently converted pseudo key selectors to fn based selectors.
+Potential inclusion are direct parentage options or index selectors for vectors.
+Will keep using and trying to find more usage patterns.
 
 ## License
 

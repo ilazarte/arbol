@@ -1,4 +1,4 @@
-(defproject ilazarte/arbol "0.1.3"
+(defproject ilazarte/arbol "0.2.0"
   
   :description "Arbol is a mixed data type tree transformer using simple selectors available in Clojure and ClojureScript."
   
@@ -14,14 +14,14 @@
   ;:main ^:skip-aot gorilla-test.core
   
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2280"]]
+                 [org.clojure/clojurescript "0.0-3058"]]
 
   ; ack! there seems to be middleware conflict between cljx and gorilla
   ; look into making a new profile for it
   ; [lein-gorilla "0.3.1" :exclusions [org.clojure/clojure]]
   
-  :plugins [[com.keminglabs/cljx "0.4.0" :exclusions [org.clojure/clojure]]
-            [lein-cljsbuild "1.0.4-SNAPSHOT"]
+  :plugins [[com.keminglabs/cljx "0.6.0"]
+            [lein-cljsbuild "1.0.5"]
             [lein-pdo "0.1.1"]]
 
   :jar-exclusions [#"\.cljx|\.svn|\.swp|\.swo|\.DS_Store"]
@@ -50,14 +50,14 @@
   
   :profiles {;:uberjar {:aot :all} ; gorilla repl
              
-             :dev {:dependencies [[compojure "1.1.8"]
-                                  [ring "1.3.0"]
+             :dev {:dependencies [[compojure "1.3.2"]
+                                  [ring "1.3.2"]
                                   [ring/ring-json "0.3.1"]
                                   [hiccup "1.0.5"]
                                   [midje "1.6.3"]]
                    
-                   :plugins [[lein-ring "0.8.11"]
-                             [lein-midje "3.0.0"]]
+                   :plugins [[lein-ring "0.9.3"]
+                             [lein-midje "3.1.3"]]
                    
                    :source-paths ["dev/clj" "dev/cljs" "test/clj"]
                    
