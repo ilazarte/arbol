@@ -131,3 +131,26 @@
                                     :y 6}
                                    {:x 7}
                                    {:y 8}]}])
+
+(def menu [{:label "Blue Beauty"
+            :id    0
+            :ingredients {:sweetener "Turbinado"
+                          :fruit     ["blueberry" "strawberry"]}}
+           {:label "Smashing Smoothie"
+            :id    1
+            :ingredients {:sweetener "Turbinado"
+                          :fruit     ["banana" "strawberry"]}}])
+
+(sweet/fact
+  "Predicates are good for subselection."
+  (core/climb
+    menu 
+    [map? [#(= (:id %) 1)] :sweetener string?]
+    (constantly "Splenda")) => [{:label "Blue Beauty"
+                                 :id    0
+                                 :ingredients {:sweetener "Turbinado"
+                                               :fruit     ["blueberry" "strawberry"]}}
+                                {:label "Smashing Smoothie"
+                                 :id    1
+                                 :ingredients {:sweetener "Splenda"
+                                               :fruit     ["banana" "strawberry"]}}])

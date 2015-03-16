@@ -33,11 +33,17 @@
         rst   (vec (apply concat (rest sels)))]
     {:axis path
      :pred pred
-     :rest rst}))
+     :rst  rst}))
 
 (defn ispath? [axis mixed]
   (if (fn? axis) 
     (axis mixed)))
+
+(comment 
+  "The traverse function depends on two concepts, matching and descending.
+   Descending is only the part where a selector axis has been matched so it is popped.
+   Matching is only allowed when all selectors and predicates have been validated as true.
+   Since the hierarchy can be N-deep, the final selector floats all the way down.")
 
 (defn traverse
   "Recursively traverses structure, in place consumes stack.
@@ -72,7 +78,7 @@
                              (second %2) 
                              (let [kparsed   (read-selector rselector)
                                    kaxis     (:axis kparsed)
-                                   krst      (:rest kparsed)
+                                   krst      (:rst kparsed)
                                    kislast   (empty? krst)
                                    key       (first %2)
                                    kispath   (= kaxis key)
